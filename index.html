@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alcaldes por un Día - Pleno del Ayuntamiento</title>
+    <title>Alcaldes por un Día / Egun Batez Alkate</title>
     <style>
         :root {
             --ods-1: #E5243B; --ods-2: #DDA63A; --ods-3: #4C9F38; --ods-6: #26BDE2;
@@ -12,6 +12,24 @@
         }
 
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: var(--bg-color); color: var(--text-color); }
+
+        /* Pantalla de Inicio */
+        #landing {
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            height: 100vh; background: linear-gradient(135deg, var(--ods-11), var(--ods-3));
+            color: white; text-align: center;
+        }
+        #landing h1 { font-size: 3.5em; margin-bottom: 10px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+        #landing p { font-size: 1.5em; margin-bottom: 40px; }
+        .lang-buttons { display: flex; gap: 20px; }
+        .lang-buttons button {
+            background: white; color: var(--text-color); border: none; padding: 20px 40px;
+            font-size: 1.5em; font-weight: bold; border-radius: 10px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
+        }
+        .lang-buttons button:hover { transform: scale(1.05); }
+        .btn-cas { border-bottom: 5px solid var(--ods-1); }
+        .btn-eus { border-bottom: 5px solid var(--ods-13); }
 
         /* Barra de Reloj Fija */
         .timer-bar {
@@ -39,15 +57,23 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { color: var(--ods-13); border-bottom: 2px solid var(--ods-7); padding-bottom: 10px; }
+        h2 { color: var(--ods-13); border-bottom: 2px solid var(--ods-7); padding-bottom: 10px; margin-top: 0; }
 
         /* Tarjetas */
         .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
         .card { background: #f9f9f9; border-left: 5px solid var(--ods-11); padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
+        /* Tarjetas Paso 3 (Misión del Equipo) */
+        .step3-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .step3-card { background: #fff; border: 1px solid #eee; border-top: 4px solid var(--ods-6); padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .step3-card h3 { margin-top: 0; color: var(--ods-6); font-size: 1.1em; display: flex; align-items: center; gap: 8px;}
+        .alert-box { background: #fff0f0; border-left: 4px solid var(--ods-1); padding: 10px; margin-top: 10px; border-radius: 4px; font-size: 0.9em; font-weight: bold; color: var(--ods-1); }
+
         .btn-action { background: var(--ods-6); color: white; border: none; padding: 12px 25px; font-size: 1.1em; border-radius: 5px; cursor: pointer; display: block; margin: 20px auto; font-weight: bold; }
-        .team-input-group { display: flex; gap: 10px; margin-bottom: 15px; background: #f0f4f8; padding: 15px; border-radius: 8px; }
-        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .team-input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: #f0f4f8; padding: 10px 15px; border-radius: 8px; align-items: stretch; }
+        .team-input-header { font-weight: bold; color: var(--ods-13); font-size: 1.05em; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .team-input-members { font-weight: normal; color: #555; font-size: 0.9em; font-style: italic; }
+        input[type="text"] { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
 
         /* Estilos Votación Pleno */
         .voting-board-final { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
@@ -79,108 +105,322 @@
 </head>
 <body>
 
-    <!-- RELOJ FIJO -->
-    <div class="timer-bar">
-        <div id="stepName" style="font-weight: bold; font-size: 1.2em; color: var(--ods-7);">Paso 1 (4 min)</div>
-        <div class="timer-display" id="timerDisplay">04:00</div>
-        <div class="timer-controls">
-            <button onclick="startTimer()">▶️ Empezar</button>
-            <button class="stop" onclick="pauseTimer()">⏸️ Pausa</button>
-            <button onclick="resetTimer()">🔄 Reiniciar</button>
+    <!-- PANTALLA DE INICIO (ELEGIR IDIOMA/CLASE) -->
+    <div id="landing">
+        <h1>🌍 Alcaldes por un Día<br>Egun Batez Alkate</h1>
+        <p>Selecciona tu clase / Aukeratu zure klasea</p>
+        <div class="lang-buttons">
+            <button class="btn-eus" onclick="startApp('eus')">EUS (8 Talde)</button>
+            <button class="btn-cas" onclick="startApp('cas')">CAS (5 Grupos)</button>
         </div>
     </div>
 
-    <header>
-        <h1>🌍 Alcaldes por un Día</h1>
-        <p>Valores Éticos | 2º ESO</p>
-    </header>
-
-    <div class="nav-tabs">
-        <button class="active" onclick="showPage('page1', 4)">1. Documental</button>
-        <button onclick="showPage('page2', 4)">2. Retos de Aoiz</button>
-        <button onclick="showPage('page3', 22)">3. Trabajo Equipo</button>
-        <button onclick="showPage('page4', 17)">4. Presentaciones</button>
-        <button onclick="showPage('page5', 8)">5. Votación Pleno</button>
-    </div>
-
-    <div class="container">
+    <!-- APLICACIÓN PRINCIPAL (OCULTA AL INICIO) -->
+    <div id="main-app" style="display: none;">
         
-        <div id="page1" class="page active">
-            <h2>🎬 Repaso rápido de "Ciudad 2030"</h2>
-            <div class="card-grid">
-                <div class="card"><h3>🔄 Economía Circular</h3><p>Reducir, reparar, reciclar y compartir en lugar de usar y tirar.</p></div>
-                <div class="card"><h3>🚲 Movilidad</h3><p>Menos coches, más bicis, paseos y transporte limpio.</p></div>
-                <div class="card"><h3>🌳 Verde</h3><p>Huertos urbanos y sombras contra el calor extremo.</p></div>
-                <div class="card"><h3>⚡ Consumo Ético</h3><p>Comprar local (Km 0) es nuestro "voto" para salvar el planeta.</p></div>
+        <!-- RELOJ FIJO -->
+        <div class="timer-bar">
+            <div id="stepName" style="font-weight: bold; font-size: 1.2em; color: var(--ods-7);"></div>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+                <button id="btnPlay" onclick="startTimer()">▶️ Empezar</button>
+                <button id="btnPause" class="stop" onclick="pauseTimer()">⏸️ Pausa</button>
+                <button id="btnReset" onclick="resetTimer()">🔄 Reiniciar</button>
             </div>
         </div>
 
-        <div id="page2" class="page">
-            <h2>📍 Retos en Aoiz (¡Votad uno!)</h2>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>1. Aludes de Plástico 🧃</h3><p>Demasiados envases en los recreos del instituto.</p>
-                    <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(1)">✋ Votar</button> <span class="challenge-score" id="chScore1">0</span> votos</div>
+        <header id="header-cas" style="display:none;">
+            <h1>🌍 Alcaldes por un Día</h1>
+            <p>Valores Éticos | 2º ESO</p>
+        </header>
+
+        <header id="header-eus" style="display:none;">
+            <h1>🌍 Egun Batez Alkate</h1>
+            <p>Balio Etikoak | DBH 2</p>
+        </header>
+
+        <!-- PESTAÑAS CAS -->
+        <div id="tabs-cas" class="nav-tabs" style="display:none;">
+            <button class="active" onclick="showPage('cas-page1', 4, 'Paso 1')">1. Documental</button>
+            <button onclick="showPage('cas-page2', 4, 'Paso 2')">2. Retos de Aoiz</button>
+            <button onclick="showPage('cas-page3', 22, 'Paso 3')">3. Trabajo Equipo</button>
+            <button onclick="showPage('cas-page4', 17, 'Paso 4')">4. Presentaciones</button>
+            <button onclick="showPage('cas-page5', 8, 'Paso 5')">5. Votación Pleno</button>
+        </div>
+
+        <!-- PESTAÑAS EUS -->
+        <div id="tabs-eus" class="nav-tabs" style="display:none;">
+            <button class="active" onclick="showPage('eus-page1', 3, '1. Urratsa')">1. Dokumentala</button>
+            <button onclick="showPage('eus-page2', 3, '2. Urratsa')">2. Erronkak</button>
+            <button onclick="showPage('eus-page3', 18, '3. Urratsa')">3. Talde Lana</button>
+            <button onclick="showPage('eus-page4', 20, '4. Urratsa')">4. Aurkezpenak</button>
+            <button onclick="showPage('eus-page5', 11, '5. Urratsa')">5. Bozketa</button>
+        </div>
+
+        <div class="container">
+            
+            <!-- ============================================== -->
+            <!-- CONTENIDO CASTELLANO (CAS) - 5 GRUPOS         -->
+            <!-- ============================================== -->
+            <div id="cas-content" style="display:none;">
+                <div id="cas-page1" class="page active">
+                    <h2>🎬 Repaso rápido de "Ciudad 2030"</h2>
+                    <div class="card-grid">
+                        <div class="card"><h3>🔄 Economía Circular</h3><p>Reducir, reparar, reciclar y compartir en lugar de usar y tirar.</p></div>
+                        <div class="card"><h3>🚲 Movilidad</h3><p>Menos coches, más bicis, paseos y transporte limpio.</p></div>
+                        <div class="card"><h3>🌳 Verde</h3><p>Huertos urbanos y sombras contra el calor extremo.</p></div>
+                        <div class="card"><h3>⚡ Consumo Ético</h3><p>Comprar local (Km 0) es nuestro "voto" para salvar el planeta.</p></div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>2. Atasco Escolar 🚗</h3><p>Coches colapsando la entrada al entrar y salir.</p>
-                    <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(2)">✋ Votar</button> <span class="challenge-score" id="chScore2">0</span> votos</div>
+
+                <div id="cas-page2" class="page">
+                    <h2>📍 Retos en Aoiz (¡Votad uno!)</h2>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>1. Aludes de Plástico 🧃</h3><p>Demasiados envases en los recreos del instituto.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(1, 'cas')">✋ Votar</button> <span class="challenge-score" id="cas-chScore1">0</span> votos</div>
+                        </div>
+                        <div class="card">
+                            <h3>2. Atasco Escolar 🚗</h3><p>Coches colapsando la entrada al entrar y salir.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(2, 'cas')">✋ Votar</button> <span class="challenge-score" id="cas-chScore2">0</span> votos</div>
+                        </div>
+                        <div class="card">
+                            <h3>3. Fugas de Energía ❄️</h3><p>Gasto enorme de calefacción en invierno en las aulas.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(3, 'cas')">✋ Votar</button> <span class="challenge-score" id="cas-chScore3">0</span> votos</div>
+                        </div>
+                        <div class="card">
+                            <h3>4. Patio de Cemento 🧱</h3><p>Falta de zonas verdes y naturaleza en nuestro entorno de recreo.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(4, 'cas')">✋ Votar</button> <span class="challenge-score" id="cas-chScore4">0</span> votos</div>
+                        </div>
+                        <div class="card">
+                            <h3>5. Paquetes de Internet 📦</h3><p>Olvidamos el comercio local de Aoiz por comprar online.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(5, 'cas')">✋ Votar</button> <span class="challenge-score" id="cas-chScore5">0</span> votos</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>3. Fugas de Energía ❄️</h3><p>Gasto enorme de calefacción en invierno en las aulas.</p>
-                    <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(3)">✋ Votar</button> <span class="challenge-score" id="chScore3">0</span> votos</div>
+
+                <div id="cas-page3" class="page">
+                    <h2>⏱️ Misión del Equipo</h2>
+                    <div class="step3-grid">
+                        <div class="step3-card">
+                            <h3>📛 1. Identidad</h3>
+                            <p>Elegid un título atractivo para vuestra medida o solución.</p>
+                        </div>
+                        <div class="step3-card">
+                            <h3>💡 2. La Medida</h3>
+                            <p>¿Cómo resolvemos el reto que ha ganado en la votación de la clase?</p>
+                        </div>
+                        <div class="step3-card">
+                            <h3>⚖️ 3. Argumento</h3>
+                            <p>¿Por qué vuestra medida es ética y ecológica?</p>
+                        </div>
+                        <div class="step3-card">
+                            <h3>🎨 4. Estudio UCE (Arte)</h3>
+                            <p>¡Diseñad el logo y el eslogan en la cartulina!</p>
+                            <div class="alert-box">⭐ Elegid a un miembro del grupo para ser el Director/a de Arte. ¡Liderará el diseño visual!</div>
+                        </div>
+                        <div class="step3-card">
+                            <h3>🎤 5. Discurso</h3>
+                            <p>Preparad 3 minutos para convencer al resto (Portavoces al poder).</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>4. Patio de Cemento 🧱</h3><p>Falta de zonas verdes y naturaleza en nuestro entorno de recreo.</p>
-                    <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(4)">✋ Votar</button> <span class="challenge-score" id="chScore4">0</span> votos</div>
+
+                <div id="cas-page4" class="page">
+                    <h2>🎤 Presentaciones al Pleno (3 min/grupo)</h2>
+                    <p>Mientras cada grupo expone su medida, el docente inscribe aquí su nombre y propuesta oficial.</p>
+                    <div id="cas-teamInputs"></div>
+                    <button class="btn-action" onclick="initVoting()">✅ Cargar Panel de Votación</button>
                 </div>
-                <div class="card">
-                    <h3>5. Paquetes de Internet 📦</h3><p>Olvidamos el comercio local de Aoiz por comprar online.</p>
-                    <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(5)">✋ Votar</button> <span class="challenge-score" id="chScore5">0</span> votos</div>
+
+                <div id="cas-page5" class="page">
+                    <h2>🎤 El Pleno: Votación Democrática</h2>
+                    <p><i>"Los concejales del Grupo 1 otorgan... 1 punto a..., 3 puntos a... y 5 puntos a..."</i></p>
+                    <div id="cas-finalVotingBoard" class="voting-board-final">
+                        <p style="text-align: center;">Registra a los equipos en el Paso 4 primero.</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="page3" class="page">
-            <h2>⏱️ Misión del Equipo</h2>
-            <p>1. <b>Identidad:</b> Elegid un nombre para vuestro grupo de trabajo y un título para vuestra solución.<br>
-               2. <b>La Medida:</b> ¿Cómo resolvemos el reto que ha ganado en la votación anterior?<br>
-               3. <b>Argumento:</b> ¿Por qué es ético y ecológico?<br>
-               4. <b>Estudio UCE (Arte):</b> ¡Diseñad el logo y el eslogan en la cartulina! <br>
-               <span style="color: var(--ods-1); font-weight: bold; display: inline-block; margin: 10px 0; padding: 10px; background: #fff0f0; border-radius: 5px; border-left: 4px solid var(--ods-1);">
-                   ⭐ Atención Grupos 2 y 4: Meilimnine y Jaime son hoy los Directores de Arte. ¡Ellos lideran el diseño visual!
-               </span><br>
-               5. <b>Discurso:</b> Preparad 3 minutos para convencer al resto (Portavoces al poder).</p>
-        </div>
+            <!-- ============================================== -->
+            <!-- CONTENIDO EUSKERA (EUS) - 8 GRUPOS             -->
+            <!-- ============================================== -->
+            <div id="eus-content" style="display:none;">
+                <div id="eus-page1" class="page active">
+                    <h2>🎬 "2030 Hiria" Errepaso azkarra</h2>
+                    <div class="card-grid">
+                        <div class="card"><h3>🔄 Ekonomia Zirkularra</h3><p>Murriztu, konpondu, birziklatu eta partekatu, erabili eta bota beharrean.</p></div>
+                        <div class="card"><h3>🚲 Mugikortasuna</h3><p>Auto gutxiago, bizikleta gehiago, ibilaldiak eta garraio garbia.</p></div>
+                        <div class="card"><h3>🌳 Berdeguneak</h3><p>Hiri-baratzeak eta itzalak muturreko beroaren aurka.</p></div>
+                        <div class="card"><h3>⚡ Kontsumo Etikoa</h3><p>Bertan erostea (0 Km) gure "botoa" da planeta salbatzeko.</p></div>
+                    </div>
+                </div>
 
-        <div id="page4" class="page">
-            <h2>🎤 Presentaciones al Pleno (3 min/grupo)</h2>
-            <p>Mientras cada grupo expone su medida (máx. 3 minutos), el docente inscribe aquí el nombre de su equipo y su propuesta oficial.</p>
-            <div id="teamInputs"></div>
-            <button class="btn-action" onclick="initVoting()">✅ Cargar Panel de Votación</button>
-        </div>
+                <div id="eus-page2" class="page">
+                    <h2>📍 Aoizko Erronkak (Bozkatu bat!)</h2>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>1. Plastiko uholdeak 🧃</h3><p>Ontzi gehiegi institutuaren jolastorduetan.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(1, 'eus')">✋ Bozkatu</button> <span class="challenge-score" id="eus-chScore1">0</span> boto</div>
+                        </div>
+                        <div class="card">
+                            <h3>2. Auto-ilarak eskolan 🚗</h3><p>Autoek sarrera ixten dute sartzean eta irtetean.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(2, 'eus')">✋ Bozkatu</button> <span class="challenge-score" id="eus-chScore2">0</span> boto</div>
+                        </div>
+                        <div class="card">
+                            <h3>3. Energia ihesak ❄️</h3><p>Berokuntza gastu handia neguan ikasgeletan.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(3, 'eus')">✋ Bozkatu</button> <span class="challenge-score" id="eus-chScore3">0</span> boto</div>
+                        </div>
+                        <div class="card">
+                            <h3>4. Porlanezko patioa 🧱</h3><p>Berdegune eta natura falta gure atseden-ingurunean.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(4, 'eus')">✋ Bozkatu</button> <span class="challenge-score" id="eus-chScore4">0</span> boto</div>
+                        </div>
+                        <div class="card">
+                            <h3>5. Interneteko paketeak 📦</h3><p>Aoizko tokiko merkataritza ahazten dugu sarean erosteagatik.</p>
+                            <div class="challenge-vote-controls"><button class="btn-vote-challenge" onclick="addChallengeVote(5, 'eus')">✋ Bozkatu</button> <span class="challenge-score" id="eus-chScore5">0</span> boto</div>
+                        </div>
+                    </div>
+                </div>
 
-        <div id="page5" class="page">
-            <h2>🎤 El Pleno: Votación Democrática</h2>
-            <p><i>"Los concejales del Grupo 1 otorgan... 1 punto a..., 3 puntos a... y 5 puntos a..."</i></p>
-            <div id="finalVotingBoard" class="voting-board-final">
-                <p style="text-align: center;">Registra a los equipos en el Paso 4 primero.</p>
+                <div id="eus-page3" class="page">
+                    <h2>⏱️ Taldearen Misioa</h2>
+                    <div class="step3-grid">
+                        <div class="step3-card">
+                            <h3>📛 1. Nortasuna</h3>
+                            <p>Aukeratu izenburu erakargarri bat zuen neurriari edo irtenbideari emateko.</p>
+                        </div>
+                        <div class="step3-card">
+                            <h3>💡 2. Neurria</h3>
+                            <p>Nola konponduko dugu aurreko bozketan irabazi duen erronka?</p>
+                        </div>
+                        <div class="step3-card">
+                            <h3>⚖️ 3. Argudioa</h3>
+                            <p>Zergatik da neurri etikoa eta ekologikoa?</p>
+                        </div>
+                        <div class="step3-card">
+                            <h3>🎨 4. Arte Estudioa</h3>
+                            <p>Diseinatu logoa eta eslogana kartoian!</p>
+                            <div class="alert-box">⭐ Izendatu taldekide bat Arte Zuzendari izateko eta diseinu bisuala gidatzeko.</div>
+                        </div>
+                        <div class="step3-card">
+                            <h3>🎤 5. Diskurtsoa</h3>
+                            <p>Prestatu aurkezpena gainerakoak konbentzitzeko (Bozeramaileak boterera).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="eus-page4" class="page">
+                    <h2>🎤 Udalbatzari Aurkezpenak (2.5 min/talde)</h2>
+                    <p>Talde bakoitzak bere neurria azaltzen duen bitartean, irakasleak hemen idatziko ditu taldearen izena eta proposamena.</p>
+                    <div id="eus-teamInputs"></div>
+                    <button class="btn-action" onclick="initVoting()">✅ Kargatu Bozketa Panela</button>
+                </div>
+
+                <div id="eus-page5" class="page">
+                    <h2>🎤 Udalbatza: Bozketa Demokratikoa</h2>
+                    <p><i>"1. taldeko zinegotziek... puntu 1 ematen diote..., 3 puntu... eta 5 puntu..."</i></p>
+                    <div id="eus-finalVotingBoard" class="voting-board-final">
+                        <p style="text-align: center;">Erregistratu taldeak 4. Urratsean lehenik.</p>
+                    </div>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
 
     <script>
-        // --- LÓGICA VOTACIÓN RETOS (PASO 2) ---
+        // --- ESTADO GENERAL ---
+        let currentLang = 'cas';
+        let numTeams = 5;
         let challengeVotes = {1:0, 2:0, 3:0, 4:0, 5:0};
-        function addChallengeVote(id) {
+
+        // --- DATOS DE LOS GRUPOS ---
+        const casGroups = [
+            "Mahfud, Piero, Samra, Dani",
+            "Maicha, Axel, Jihane, Meilimnine",
+            "André, Iemima, Mehr Mah, Denis",
+            "Ian, Rayyan, Jose, Jaime",
+            "Talla, Antonio, Daria, Sinan"
+        ];
+        
+        const eusGroups = [
+            "Ainara, Omar, Ibai, Martxelo",
+            "Milana, Izar, Xabi, Josune",
+            "Leo, Claudia, Leire",
+            "Beñat, Aitor U., Eukene",
+            "Iraitz, Eder, Xubane",
+            "Saioa, Zuriñe, Luca",
+            "Ander, Aitor M., Fermintxo",
+            "Egoi, Luis, Nerea"
+        ];
+
+        // --- ARRANQUE DE LA APP ---
+        function startApp(lang) {
+            currentLang = lang;
+            document.getElementById('landing').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+
+            // Resetear votos de retos
+            challengeVotes = {1:0, 2:0, 3:0, 4:0, 5:0};
+            for(let i=1; i<=5; i++){
+                document.getElementById(`cas-chScore${i}`).innerText = "0";
+                document.getElementById(`eus-chScore${i}`).innerText = "0";
+            }
+
+            if (lang === 'cas') {
+                numTeams = 5;
+                document.getElementById('header-cas').style.display = 'block';
+                document.getElementById('tabs-cas').style.display = 'flex';
+                document.getElementById('cas-content').style.display = 'block';
+                
+                // Traducir botones timer
+                document.getElementById('btnPlay').innerText = "▶️ Empezar";
+                document.getElementById('btnPause').innerText = "⏸️ Pausa";
+                document.getElementById('btnReset').innerText = "🔄 Reiniciar";
+
+                generateInputs('cas', casGroups, "Título de su Medida");
+                showPage('cas-page1', 4, 'Paso 1');
+
+            } else {
+                numTeams = 8;
+                document.getElementById('header-eus').style.display = 'block';
+                document.getElementById('tabs-eus').style.display = 'flex';
+                document.getElementById('eus-content').style.display = 'block';
+
+                // Traducir botones timer
+                document.getElementById('btnPlay').innerText = "▶️ Hasi";
+                document.getElementById('btnPause').innerText = "⏸️ Pausatu";
+                document.getElementById('btnReset').innerText = "🔄 Berrabiarazi";
+
+                generateInputs('eus', eusGroups, "Proposamenaren Izenburua");
+                showPage('eus-page1', 3, '1. Urratsa');
+            }
+        }
+
+        // --- GENERAR INPUTS DE REGISTRO ---
+        function generateInputs(prefix, groupsArray, placeholderProposal) {
+            const container = document.getElementById(`${prefix}-teamInputs`);
+            container.innerHTML = '';
+            groupsArray.forEach((members, index) => {
+                let i = index + 1;
+                let groupLabel = prefix === 'cas' ? `Grupo ${i}` : `${i}. Taldea`;
+                container.innerHTML += `
+                    <div class="team-input-group">
+                        <div class="team-input-header">${groupLabel} <span class="team-input-members">(${members})</span></div>
+                        <input type="text" id="${prefix}-pName${i}" placeholder="${placeholderProposal}">
+                    </div>`;
+            });
+        }
+
+        // --- LÓGICA VOTACIÓN RETOS (PASO 2) ---
+        function addChallengeVote(id, prefix) {
             challengeVotes[id]++;
-            document.getElementById(`chScore${id}`).innerText = challengeVotes[id];
+            document.getElementById(`${prefix}-chScore${id}`).innerText = challengeVotes[id];
         }
 
         // --- LÓGICA DEL RELOJ ---
         let timerInterval;
-        let timeRemaining = 4 * 60; // Por defecto 4 mins
+        let timeRemaining = 0;
         let isRunning = false;
 
         function updateTimerDisplay() {
@@ -194,7 +434,11 @@
             isRunning = true;
             timerInterval = setInterval(() => {
                 if (timeRemaining > 0) { timeRemaining--; updateTimerDisplay(); }
-                else { pauseTimer(); alert("¡Tiempo terminado para este paso!"); }
+                else { 
+                    pauseTimer(); 
+                    let msg = currentLang === 'cas' ? "¡Tiempo terminado para este paso!" : "Denbora amaitu da urrats honetarako!";
+                    alert(msg); 
+                }
             }, 1000);
         }
 
@@ -203,15 +447,19 @@
         function resetTimer() {
             pauseTimer();
             // Buscar la pestaña activa para saber los minutos originales
-            let activeBtn = document.querySelector('.nav-tabs button.active');
-            let mins = parseInt(activeBtn.getAttribute('onclick').match(/\d+/g)[1]);
+            let activeBtn = document.querySelector(`#tabs-${currentLang} button.active`);
+            let mins = parseInt(activeBtn.getAttribute('onclick').match(/,\s*(\d+)\s*,/)[1]);
             timeRemaining = mins * 60;
             updateTimerDisplay();
         }
 
-        function showPage(pageId, minutes) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-tabs button').forEach(btn => btn.classList.remove('active'));
+        function showPage(pageId, minutes, stepLabel) {
+            // Ocultar todas las páginas del idioma actual
+            document.querySelectorAll(`#${currentLang}-content .page`).forEach(page => page.classList.remove('active'));
+            // Quitar clase active de todas las pestañas
+            document.querySelectorAll(`#tabs-${currentLang} button`).forEach(btn => btn.classList.remove('active'));
+            
+            // Mostrar página y activar botón
             document.getElementById(pageId).classList.add('active');
             event.currentTarget.classList.add('active');
             
@@ -219,36 +467,46 @@
             pauseTimer();
             timeRemaining = minutes * 60;
             updateTimerDisplay();
-            document.getElementById('stepName').innerText = `Paso ${pageId.replace('page','')} (${minutes} min)`;
+            document.getElementById('stepName').innerText = `${stepLabel} (${minutes} min)`;
         }
 
-        // --- LÓGICA DE REGISTRO DE EQUIPOS ---
-        const numTeams = 5;
-        const container = document.getElementById('teamInputs');
-        for (let i = 1; i <= numTeams; i++) {
-            container.innerHTML += `
-                <div class="team-input-group">
-                    <input type="text" id="tName${i}" placeholder="Nombre Grupo ${i}">
-                    <input type="text" id="pName${i}" placeholder="Título de su Medida">
-                </div>`;
-        }
-
-        // --- LÓGICA DE VOTACIÓN ---
+        // --- LÓGICA DE VOTACIÓN PANEL (PASO 5) ---
         let teamsData = [];
 
         function initVoting() {
             teamsData = [];
-            for (let i = 1; i <= numTeams; i++) {
-                let tn = document.getElementById(`tName${i}`).value.trim();
-                let pn = document.getElementById(`pName${i}`).value.trim();
-                if (tn || pn) {
-                    teamsData.push({ id: i, team: tn||`Grupo ${i}`, proposal: pn||`Propuesta ${i}`, points: 0 });
-                }
-            }
-            if (teamsData.length === 0) { alert("Mete al menos un equipo."); return; }
+            let prefix = currentLang;
+            let activeGroups = currentLang === 'cas' ? casGroups : eusGroups;
             
-            showPage('page5', 8);
-            document.querySelectorAll('.nav-tabs button')[4].classList.add('active');
+            for (let i = 1; i <= activeGroups.length; i++) {
+                let pn = document.getElementById(`${prefix}-pName${i}`).value.trim();
+                let defaultPName = currentLang === 'cas' ? `Propuesta ${i}` : `${i}. Proposamena`;
+
+                // Añadimos todos los grupos automáticamente
+                teamsData.push({ 
+                    id: i, 
+                    team: activeGroups[i-1], 
+                    proposal: pn || defaultPName, 
+                    points: 0 
+                });
+            }
+            
+            // Cambiar a la pestaña 5 programáticamente
+            let mins = currentLang === 'cas' ? 8 : 11;
+            let label = currentLang === 'cas' ? 'Paso 5' : '5. Urratsa';
+            let pageId = `${currentLang}-page5`;
+            
+            document.querySelectorAll(`#${currentLang}-content .page`).forEach(page => page.classList.remove('active'));
+            document.querySelectorAll(`#tabs-${currentLang} button`).forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll(`#tabs-${currentLang} button`)[4].classList.add('active'); // El 5º botón
+            
+            pauseTimer();
+            timeRemaining = mins * 60;
+            updateTimerDisplay();
+            document.getElementById('stepName').innerText = `${label} (${mins} min)`;
+
             renderVoting();
         }
 
@@ -258,13 +516,10 @@
         }
 
         function renderVoting() {
-            // Ordenar de mayor a menor puntuación
             teamsData.sort((a, b) => b.points - a.points);
-            
-            const board = document.getElementById('finalVotingBoard');
+            const board = document.getElementById(`${currentLang}-finalVotingBoard`);
             board.innerHTML = '';
             
-            // Buscar la puntuación máxima para calcular el porcentaje de la barra (minimo 10 para que no sea 100% con 1 punto)
             let maxPoints = Math.max(10, ...teamsData.map(t => t.points));
 
             teamsData.forEach((t, index) => {
@@ -278,7 +533,7 @@
                         </div>
                         <div class="vote-bar-container">
                             <div class="vote-bar" style="width: ${percentage}%"></div>
-                            <div class="vote-score">${t.points} pts</div>
+                            <div class="vote-score">${t.points} ${currentLang === 'cas' ? 'pts' : 'pt'}</div>
                         </div>
                         <div class="vote-controls">
                             <button class="btn-1" onclick="addPoints(${t.id}, 1)">+1</button>
